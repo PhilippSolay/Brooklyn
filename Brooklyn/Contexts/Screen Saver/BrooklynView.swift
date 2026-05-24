@@ -46,6 +46,7 @@ extension BrooklynView {
     override func startAnimation() {
         super.startAnimation()
         videoLayer.player = manager.player
+        manager.player.start()
         manager.player.play()
     }
     
