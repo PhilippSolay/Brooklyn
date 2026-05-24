@@ -49,9 +49,22 @@ extension BrooklynView {
         manager.player.start()
         manager.player.play()
     }
-    
+
     override func stopAnimation() {
         super.stopAnimation()
+        // Just pause here — `stopAnimation` is called every time the screensaver
+        // is dismissed (e.g. mouse wiggle), and dropping the queue would force a
+        // full rebuild on every re-activation. Real teardown happens below in
+        // viewWillMove(toWindow:) when the window goes nil.
+        manager.player.pause()
+    }
+
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        super.viewWillMove(toWindow: newWindow)
+        // newWindow == nil means the view is being removed from the window
+        // hierarchy — the actual teardown signal. Drain the queue and drop the
+        // layer's player reference so VTDecoderXPCService can release.
+        guard newWindow == nil else { return }
         manager.player.pause()
         manager.player.stop()
         videoLayer.player = nil

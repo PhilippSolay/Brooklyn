@@ -52,6 +52,7 @@ extension LoopPlayer {
     /// drained by `stop()`. No-op when the queue still has items, so the first
     /// `startAnimation()` after init doesn't double up.
     func start() {
+        dispatchPrecondition(condition: .onQueue(.main))
         guard items().isEmpty else { return }
         let avItems = LoopPlayer.buildItems(from: sourceAnimations,
                                             numberOfLoops: sourceNumberOfLoops,
@@ -63,11 +64,13 @@ extension LoopPlayer {
     }
 
     func stop() {
+        dispatchPrecondition(condition: .onQueue(.main))
         managedItemIDs.removeAll()
         removeAllItems()
     }
 
     func play(_ animation: Animation) {
+        dispatchPrecondition(condition: .onQueue(.main))
         guard let item = AVPlayerItem(video: animation, extension: .mp4, for: LoopPlayer.self) else { return }
         actionAtItemEnd = .none
         stop()
@@ -85,12 +88,26 @@ private extension LoopPlayer {
     static func buildItems(from animations: [Animation],
                            numberOfLoops: Int,
                            shouldRandomize: Bool) -> [AVPlayerItem] {
-        return (shouldRandomize ? animations.shuffled() : animations)
-            .reduce(into: [AVPlayerItem]()) {
-                guard let item = AVPlayerItem(video: $1, extension: .mp4, for: LoopPlayer.self) else { return }
-                $0.append(contentsOf: Array(copy: item, count: numberOfLoops))
+        let ordered = shouldRandomize ? animations.shuffled() : animations
+        var failed: [Animation] = []
+        var built: [AVPlayerItem] = []
+        for animation in ordered {
+            guard let item = AVPlayerItem(video: animation, extension: .mp4, for: LoopPlayer.self) else {
+                failed.append(animation)
+                continue
             }
-            .prepareForQueue()
+            built.append(contentsOf: Array(copy: item, count: numberOfLoops))
+        }
+        if !failed.isEmpty {
+            let names = failed.map { $0.rawValue }.joined(separator: ", ")
+            NSLog("Brooklyn: failed to load animation resource(s): %@", names)
+        }
+        if built.isEmpty,
+           let fallback = AVPlayerItem(video: .original, extension: .mp4, for: LoopPlayer.self) {
+            NSLog("Brooklyn: no animations loaded; falling back to .original")
+            built.append(fallback)
+        }
+        return built.prepareForQueue()
     }
 }
 
@@ -127,6 +144,13 @@ private extension LoopPlayer {
             guard let itemCopy = finishedItem.copy() as? AVPlayerItem else { return }
             self.managedItemIDs.insert(ObjectIdentifier(itemCopy))
             self.insert(itemCopy, after: self.items().last)
+
+            // Race recovery: if main was blocked long enough for the queue to drain
+            // before this insert landed, AVQueuePlayer is now in its ended state.
+            // Calling play() makes it pick up the newly inserted item.
+            if self.currentItem == nil && !self.items().isEmpty {
+                self.play()
+            }
         }
     }
 }
