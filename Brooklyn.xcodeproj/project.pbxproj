@@ -955,7 +955,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7GE4Q65N57;
 				INFOPLIST_FILE = "$(SRCROOT)/Brooklyn/Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
@@ -965,9 +965,9 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2026.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.philippsolay.brooklyn2026;
-				PRODUCT_NAME = "Brooklyn 2026"; PRODUCT_MODULE_NAME = Brooklyn;
+				MARKETING_VERSION = 2.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = oedrommcarrasco.brooklyn;
+				PRODUCT_NAME = Brooklyn;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -983,7 +983,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7GE4Q65N57;
 				INFOPLIST_FILE = "$(SRCROOT)/Brooklyn/Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
@@ -993,9 +993,9 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2026.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.philippsolay.brooklyn2026;
-				PRODUCT_NAME = "Brooklyn 2026"; PRODUCT_MODULE_NAME = Brooklyn;
+				MARKETING_VERSION = 2.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = oedrommcarrasco.brooklyn;
+				PRODUCT_NAME = Brooklyn;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = saver;
