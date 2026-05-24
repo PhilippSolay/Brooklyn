@@ -69,6 +69,17 @@ extension BrooklynView {
         manager.player.stop()
         videoLayer.player = nil
     }
+
+    // videoLayer is assigned as the view's main layer (layer = videoLayer in
+    // defineLayer). autoresizingMask only applies to sublayers, not the main
+    // layer, so the layer's frame doesn't follow the view automatically.
+    // Without this, the preview pane on macOS 14+ ends up rendering to a 0x0
+    // surface (frames decode but displayed: 0). Sync the layer to bounds on
+    // every layout pass.
+    override func layout() {
+        super.layout()
+        videoLayer.frame = bounds
+    }
 }
 
 // MARK: - Configuration
