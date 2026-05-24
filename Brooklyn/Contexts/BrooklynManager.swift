@@ -14,7 +14,7 @@ import AVKit
 final class BrooklynManager {
     
     private enum Constant {
-        static let bundleId = "oedrommcarrasco.brooklyn"
+        static let bundleId = "com.philippsolay.brooklyn2026"
         static let versionKey = "CFBundleShortVersionString"
     }
     
