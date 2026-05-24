@@ -52,7 +52,7 @@ extension LoopPlayer {
     /// drained by `stop()`. No-op when the queue still has items, so the first
     /// `startAnimation()` after init doesn't double up.
     func start() {
-        dispatchPrecondition(condition: .onQueue(.main))
+        if #available(macOS 10.12, *) { dispatchPrecondition(condition: .onQueue(.main)) }
         guard items().isEmpty else { return }
         let avItems = LoopPlayer.buildItems(from: sourceAnimations,
                                             numberOfLoops: sourceNumberOfLoops,
@@ -64,13 +64,13 @@ extension LoopPlayer {
     }
 
     func stop() {
-        dispatchPrecondition(condition: .onQueue(.main))
+        if #available(macOS 10.12, *) { dispatchPrecondition(condition: .onQueue(.main)) }
         managedItemIDs.removeAll()
         removeAllItems()
     }
 
     func play(_ animation: Animation) {
-        dispatchPrecondition(condition: .onQueue(.main))
+        if #available(macOS 10.12, *) { dispatchPrecondition(condition: .onQueue(.main)) }
         guard let item = AVPlayerItem(video: animation, extension: .mp4, for: LoopPlayer.self) else { return }
         actionAtItemEnd = .none
         stop()
